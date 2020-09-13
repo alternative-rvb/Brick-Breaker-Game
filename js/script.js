@@ -6,7 +6,7 @@ let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
 // Config
-let vitesse = 15;//vitesse ms
+let vitesse = 15; //vitesse ms
 let cheat = 0; // 0 ... 5 max
 let vie = 3;
 
@@ -91,10 +91,10 @@ const drawScore = (color = "green") => {
 const drawLives = (color = "yellow") => {
   ctx.font = "bold 16px Arial";
   ctx.fillStyle = color;
-  ctx.fillText("Lives: "+ lives, canvas.width - 65, 20);
+  ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
 };
 
-// Détection des colisions de la balle avec les briques 
+// Détection des colisions de la balle avec les briques
 const collisionDetection = () => {
   for (let c = 0; c < brickColumnCount; c++) {
     for (let r = 0; r < brickRowCount; r++) {
@@ -122,7 +122,10 @@ const collisionDetection = () => {
 
 const mouseMoveHandler = (e) => {
   var relativeX = e.clientX - canvas.offsetLeft;
-  if (relativeX - paddleWidth / 2 > 0 && relativeX < canvas.width - paddleWidth / 2) {
+  if (
+    relativeX - paddleWidth / 2 > 0 &&
+    relativeX < canvas.width - paddleWidth / 2
+  ) {
     paddleX = relativeX - paddleWidth / 2;
   }
 };
@@ -150,9 +153,18 @@ const game = () => {
         " paddleX End : ",
         paddleX + paddleWidth
       );
-      alert("GAME OVER");
-      document.location.reload();
-      clearInterval(interval);
+      lives--;
+      if (!lives) {
+        alert("GAME OVER");
+        document.location.reload();
+        clearInterval(interval); // Needed for Chrome to end game
+      } else {
+        x = canvas.width / 2;
+        y = canvas.height - 30;
+        dx = 2;
+        dy = -2;
+        paddleX = (canvas.width - paddleWidth) / 2;
+      }
     }
   }
   if (rightPressed) {
