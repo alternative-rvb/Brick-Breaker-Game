@@ -118,6 +118,7 @@ var collisionDetection = function collisionDetection() {
           if (score == brickRowCount * brickColumnCount) {
             alert("C'est gagné, Bravo!");
             document.location.reload();
+            clearInterval(interval); // Needed for Chrome to end game
           }
         }
       }
@@ -133,7 +134,7 @@ var mouseMoveHandler = function mouseMoveHandler(e) {
   }
 };
 
-var game = function game() {
+var game = setInterval(function (vitesse) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBricks();
   drawBall();
@@ -155,6 +156,7 @@ var game = function game() {
       if (!vies) {
         alert("GAME OVER");
         document.location.reload();
+        clearInterval(interval); // Needed for Chrome to end game
       } else {
         alert("Il vous reste : " + vies + " vie(s)");
         x = canvas.width / 2;
@@ -183,10 +185,8 @@ var game = function game() {
   drawPaddle();
   collisionDetection();
   drawScore();
-  drawLives(); // Lancer la fonction en boucle
-
-  requestAnimationFrame(game);
-};
+  drawLives();
+}, vitesse);
 
 keyDownHandler = function keyDownHandler(e) {
   if (e.key == "Right" || e.key == "ArrowRight") {
@@ -206,6 +206,6 @@ keyUpHandler = function keyUpHandler(e) {
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
-game();
+document.addEventListener("mousemove", mouseMoveHandler, false); // let interval =
+
 console.log("Script loaded");

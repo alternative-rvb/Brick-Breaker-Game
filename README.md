@@ -1,10 +1,14 @@
-Brick Breaker Game V1.1
+Brick Breaker Game V1.3
 ===
 
-## BUGS
+BUGS
+---
 
-RAS
+- [ ] Corriger l'avertissement du nb de vies
 
-## TODO
+TODO
+---
 
+- [ ] Ajout de conditions de vitesse
+- [ ] Ajout de modèles de briques
 - [ ] Refactoring
