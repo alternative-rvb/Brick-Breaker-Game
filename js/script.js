@@ -1,30 +1,32 @@
-/*jshint esversion: 6 */
-
+/* jshint esversion: 6 */
 console.log("Script begin ...");
 
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
-// Config
+/* Config général du jeu */
 let vitesse = 15; //vitesse ms
 let cheat = 0; // 0 ... 5 max
-let vies = 3;
+let vies = 3; // Nombre de vies du joueur
+/* end */
 
-// Balle
+/* Propriétés de la Balle */
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
 let ballRadius = 10;
+/* end */
 
-// Raquette
+/* Propriétés de la Raquette */
 let paddleHeight = 10;
 let paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
+/* end */
 
-// Briques
+/* Propriétés des Briques */
 let brickRowCount = 3;
 let brickColumnCount = 5;
 let brickWidth = 75;
@@ -33,8 +35,9 @@ let brickPadding = 10;
 let brickOffsetTop = 40;
 let brickOffsetLeft = 30;
 let score = 0;
+/* end */
 
-// Tableau des briques
+/* Tableau des briques */
 let bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
   bricks[c] = [];
@@ -42,6 +45,7 @@ for (let c = 0; c < brickColumnCount; c++) {
     bricks[c][r] = { x: 0, y: 0, status: 1 };
   }
 }
+/* end */
 
 // Affichage de la balle
 const drawBall = (color = "red") => {
@@ -51,8 +55,9 @@ const drawBall = (color = "red") => {
   ctx.fill();
   ctx.closePath();
 };
+/* end */
 
-// Affichage de la raquette
+/* Affichage de la raquette */
 const drawPaddle = (color = " green") => {
   ctx.beginPath();
   ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
@@ -60,9 +65,10 @@ const drawPaddle = (color = " green") => {
   ctx.fill();
   ctx.closePath();
 };
+/* end */
 
-// Affichage des briques
-const drawBricks = (color = "#0095DD") => {
+/* Affichage des briques */
+const drawBricks = (color = "blue") => {
   for (let c = 0; c < brickColumnCount; c++) {
     for (let r = 0; r < brickRowCount; r++) {
       if (bricks[c][r].status == 1) {
@@ -79,22 +85,25 @@ const drawBricks = (color = "#0095DD") => {
     }
   }
 };
+/* end */
 
-// Affichage du score
+/* Affichage du score */
 const drawScore = (color = "green") => {
   ctx.font = "bold 16px Arial";
   ctx.fillStyle = color;
   ctx.fillText("Score: " + score, 30, 30);
 };
+/* end */
 
-// Affichage du nombre de vies
+/* Affichage du nombre de vies */
 const drawLives = (color = "green") => {
   ctx.font = "bold 16px Arial";
   ctx.fillStyle = color;
   ctx.fillText("Vies: " + vies, canvas.width - 90, 30);
 };
+/* end */
 
-// Détection des colisions de la balle avec les briques
+/* Détection des colisions de la balle avec les briques */
 const collisionDetection = () => {
   for (let c = 0; c < brickColumnCount; c++) {
     for (let r = 0; r < brickRowCount; r++) {
@@ -119,17 +128,47 @@ const collisionDetection = () => {
     }
   }
 };
+/* end */
 
-const mouseMoveHandler = (e) => {
-  var relativeX = e.clientX - canvas.offsetLeft;
-  if (
-    relativeX - paddleWidth / 2 > 0 &&
-    relativeX < canvas.width - paddleWidth / 2
-  ) {
-    paddleX = relativeX - paddleWidth / 2;
-  }
-};
+/* Controles */
+const keyDownHandler = document.addEventListener(
+  "keydown",
+  (e) => {
+    if (e.key == "Right" || e.key == "ArrowRight") {
+      rightPressed = true;
+    } else if (e.key == "Left" || e.key == "ArrowLeft") {
+      leftPressed = true;
+    }
+  },
+  false
+);
+const keyUpHandler = document.addEventListener(
+  "keyup",
+  (e) => {
+    if (e.key == "Right" || e.key == "ArrowRight") {
+      rightPressed = false;
+    } else if (e.key == "Left" || e.key == "ArrowLeft") {
+      leftPressed = false;
+    }
+  },
+  false
+);
+const mouseMoveHandler = document.addEventListener(
+  "mousemove",
+  (e) => {
+    var relativeX = e.clientX - canvas.offsetLeft;
+    if (
+      relativeX - paddleWidth / 2 > 0 &&
+      relativeX < canvas.width - paddleWidth / 2
+    ) {
+      paddleX = relativeX - paddleWidth / 2;
+    }
+  },
+  false
+);
+/* end */
 
+/* Le jeu */
 const game = setInterval((vitesse) => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBricks();
@@ -145,6 +184,7 @@ const game = setInterval((vitesse) => {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
     } else {
+      //Conditions pour gagner ou perdre
       vies--;
       if (!vies) {
         alert("GAME OVER");
@@ -172,31 +212,10 @@ const game = setInterval((vitesse) => {
     }
   }
   drawPaddle();
-  collisionDetection();
   drawScore();
   drawLives();
+  collisionDetection();
 }, vitesse);
-
-keyDownHandler = (e) => {
-  if (e.key == "Right" || e.key == "ArrowRight") {
-    rightPressed = true;
-  } else if (e.key == "Left" || e.key == "ArrowLeft") {
-    leftPressed = true;
-  }
-};
-
-keyUpHandler = (e) => {
-  if (e.key == "Right" || e.key == "ArrowRight") {
-    rightPressed = false;
-  } else if (e.key == "Left" || e.key == "ArrowLeft") {
-    leftPressed = false;
-  }
-};
-
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
-
-// let interval =
+/* end */
 
 console.log("Script loaded");

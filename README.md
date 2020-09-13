@@ -11,4 +11,5 @@ TODO
 
 - [ ] Ajout de conditions de vitesse
 - [ ] Ajout de modèles de briques
+- [ ] Optimiser et styliser les alertes pour le joueur
 - [ ] Refactoring
