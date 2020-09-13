@@ -1,9 +1,9 @@
 Brick Breaker Game V1.1
 ===
 
-## Bugs
+## BUGS
 
-- [ ] Affichage des vies
+RAS
 
 ## TODO
 
