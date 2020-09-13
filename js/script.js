@@ -8,7 +8,7 @@ let ctx = canvas.getContext("2d");
 // Config
 let vitesse = 15; //vitesse ms
 let cheat = 0; // 0 ... 5 max
-let vie = 3;
+let vies = 3;
 
 // Balle
 let x = canvas.width / 2;
@@ -53,7 +53,7 @@ const drawBall = (color = "red") => {
 };
 
 // Affichage de la raquette
-const drawPaddle = (color = "#0095DD") => {
+const drawPaddle = (color = " green") => {
   ctx.beginPath();
   ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
   ctx.fillStyle = color;
@@ -88,10 +88,10 @@ const drawScore = (color = "green") => {
 };
 
 // Affichage du nombre de vies
-const drawLives = (color = "yellow") => {
+const drawLives = (color = "green") => {
   ctx.font = "bold 16px Arial";
   ctx.fillStyle = color;
-  ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
+  ctx.fillText("Vies: " + vies, canvas.width - 65, 20);
 };
 
 // Détection des colisions de la balle avec les briques
@@ -145,20 +145,13 @@ const game = () => {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
     } else {
-      console.log(
-        "GAME OVER - x : ",
-        x,
-        " paddleX start : ",
-        paddleX,
-        " paddleX End : ",
-        paddleX + paddleWidth
-      );
-      lives--;
-      if (!lives) {
+      vies--;
+      if (!vies) {
         alert("GAME OVER");
         document.location.reload();
         clearInterval(interval); // Needed for Chrome to end game
       } else {
+        alert("Il vous reste : " + vies + " vie(s)");
         x = canvas.width / 2;
         y = canvas.height - 30;
         dx = 2;

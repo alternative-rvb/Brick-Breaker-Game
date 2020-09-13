@@ -9,7 +9,7 @@ var vitesse = 15; //vitesse ms
 
 var cheat = 0; // 0 ... 5 max
 
-var vie = 3; // Balle
+var vies = 3; // Balle
 
 var x = canvas.width / 2;
 var y = canvas.height - 30;
@@ -58,7 +58,7 @@ var drawBall = function drawBall() {
 
 
 var drawPaddle = function drawPaddle() {
-  var color = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "#0095DD";
+  var color = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : " green";
   ctx.beginPath();
   ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
   ctx.fillStyle = color;
@@ -97,10 +97,10 @@ var drawScore = function drawScore() {
 
 
 var drawLives = function drawLives() {
-  var color = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "yellow";
+  var color = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "green";
   ctx.font = "bold 16px Arial";
   ctx.fillStyle = color;
-  ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
+  ctx.fillText("Vies: " + vies, canvas.width - 65, 20);
 }; // Détection des colisions de la balle avec les briques
 
 
@@ -151,14 +151,14 @@ var game = function game() {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
     } else {
-      console.log("GAME OVER - x : ", x, " paddleX start : ", paddleX, " paddleX End : ", paddleX + paddleWidth);
-      lives--;
+      vies--;
 
-      if (!lives) {
+      if (!vies) {
         alert("GAME OVER");
         document.location.reload();
         clearInterval(interval); // Needed for Chrome to end game
       } else {
+        alert("Il vous reste : " + vies + " vie(s)");
         x = canvas.width / 2;
         y = canvas.height - 30;
         dx = 2;
