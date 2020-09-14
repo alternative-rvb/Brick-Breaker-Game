@@ -130,6 +130,55 @@ const collisionDetection = () => {
 };
 /* end */
 
+/* Conditions du jeu - Comportement de la balle */
+const rule = () => {
+  x += dx;
+  y += dy;
+  if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+    dx = -dx;
+  }
+  if (y + dy < ballRadius) {
+    dy = -dy;
+  } else if (y + dy > canvas.height - ballRadius) {
+    if (x > paddleX && x < paddleX + paddleWidth) {
+      dy = -dy;
+    } else {
+      //Conditions pour gagner ou perdre
+      vies--;
+      if (!vies) {
+        alert("GAME OVER");
+        document.location.reload();
+        clearInterval(interval); // Needed for Chrome to end game
+      } else {
+        alert("Il vous reste : " + vies + " vie(s)");
+        x = canvas.width / 2;
+        y = canvas.height - 30;
+        dx = 2;
+        dy = -2;
+        paddleX = (canvas.width - paddleWidth) / 2;
+      }
+    }
+  }
+};
+/* end */
+
+/* Déplacement de la balle */
+const remote = () => {
+  if (rightPressed) {
+    paddleX += 7;
+    if (paddleX + paddleWidth > canvas.width) {
+      paddleX = canvas.width - paddleWidth;
+    }
+  } else if (leftPressed) {
+    paddleX -= 7;
+    if (paddleX < 0) {
+      paddleX = 0;
+    }
+  }
+}
+/* end */
+
+
 /* Controles */
 const keyDownHandler = document.addEventListener(
   "keydown",
@@ -168,53 +217,18 @@ const mouseMoveHandler = document.addEventListener(
 );
 /* end */
 
+
 /* Le jeu */
-const game = setInterval((vitesse) => {
+const game = setInterval(() => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBricks();
   drawBall();
-  x += dx;
-  y += dy;
-  if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
-    dx = -dx;
-  }
-  if (y + dy < ballRadius) {
-    dy = -dy;
-  } else if (y + dy > canvas.height - ballRadius) {
-    if (x > paddleX && x < paddleX + paddleWidth) {
-      dy = -dy;
-    } else {
-      //Conditions pour gagner ou perdre
-      vies--;
-      if (!vies) {
-        alert("GAME OVER");
-        document.location.reload();
-        clearInterval(interval); // Needed for Chrome to end game
-      } else {
-        alert("Il vous reste : " + vies + " vie(s)");
-        x = canvas.width / 2;
-        y = canvas.height - 30;
-        dx = 2;
-        dy = -2;
-        paddleX = (canvas.width - paddleWidth) / 2;
-      }
-    }
-  }
-  if (rightPressed) {
-    paddleX += 7;
-    if (paddleX + paddleWidth > canvas.width) {
-      paddleX = canvas.width - paddleWidth;
-    }
-  } else if (leftPressed) {
-    paddleX -= 7;
-    if (paddleX < 0) {
-      paddleX = 0;
-    }
-  }
   drawPaddle();
   drawScore();
   drawLives();
+  rule();
   collisionDetection();
+  remote();
 }, vitesse);
 /* end */
 

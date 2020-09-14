@@ -158,38 +158,10 @@ var collisionDetection = function collisionDetection() {
 };
 /* end */
 
-/* Controles */
+/* Conditions du jeu - Comportement de la balle */
 
 
-var keyDownHandler = document.addEventListener("keydown", function (e) {
-  if (e.key == "Right" || e.key == "ArrowRight") {
-    rightPressed = true;
-  } else if (e.key == "Left" || e.key == "ArrowLeft") {
-    leftPressed = true;
-  }
-}, false);
-var keyUpHandler = document.addEventListener("keyup", function (e) {
-  if (e.key == "Right" || e.key == "ArrowRight") {
-    rightPressed = false;
-  } else if (e.key == "Left" || e.key == "ArrowLeft") {
-    leftPressed = false;
-  }
-}, false);
-var mouseMoveHandler = document.addEventListener("mousemove", function (e) {
-  var relativeX = e.clientX - canvas.offsetLeft;
-
-  if (relativeX - paddleWidth / 2 > 0 && relativeX < canvas.width - paddleWidth / 2) {
-    paddleX = relativeX - paddleWidth / 2;
-  }
-}, false);
-/* end */
-
-/* Le jeu */
-
-var game = setInterval(function (vitesse) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawBricks();
-  drawBall();
+var rule = function rule() {
   x += dx;
   y += dy;
 
@@ -220,7 +192,13 @@ var game = setInterval(function (vitesse) {
       }
     }
   }
+};
+/* end */
 
+/* Déplacement de la balle */
+
+
+var remote = function remote() {
   if (rightPressed) {
     paddleX += 7;
 
@@ -234,11 +212,47 @@ var game = setInterval(function (vitesse) {
       paddleX = 0;
     }
   }
+};
+/* end */
 
+/* Controles */
+
+
+var keyDownHandler = document.addEventListener("keydown", function (e) {
+  if (e.key == "Right" || e.key == "ArrowRight") {
+    rightPressed = true;
+  } else if (e.key == "Left" || e.key == "ArrowLeft") {
+    leftPressed = true;
+  }
+}, false);
+var keyUpHandler = document.addEventListener("keyup", function (e) {
+  if (e.key == "Right" || e.key == "ArrowRight") {
+    rightPressed = false;
+  } else if (e.key == "Left" || e.key == "ArrowLeft") {
+    leftPressed = false;
+  }
+}, false);
+var mouseMoveHandler = document.addEventListener("mousemove", function (e) {
+  var relativeX = e.clientX - canvas.offsetLeft;
+
+  if (relativeX - paddleWidth / 2 > 0 && relativeX < canvas.width - paddleWidth / 2) {
+    paddleX = relativeX - paddleWidth / 2;
+  }
+}, false);
+/* end */
+
+/* Le jeu */
+
+var game = setInterval(function () {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBricks();
+  drawBall();
   drawPaddle();
   drawScore();
   drawLives();
+  rule();
   collisionDetection();
+  remote();
 }, vitesse);
 /* end */
 
